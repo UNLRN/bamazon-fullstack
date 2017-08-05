@@ -1,6 +1,5 @@
-import React, {	Component } from 'react';
-import './App.css';
-import Customer from './components/customer.js'
+import React, { Component } from 'react';
+import Customer from './Customer.js'
 
 class App extends Component {
 	constructor(props) {
@@ -13,29 +12,38 @@ class App extends Component {
 		this.handlePurchase = this.handlePurchase.bind(this);
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		fetch('/customer')
 			.then(res => {
 				return res.json()
 			})
 			.then(product => {
-				this.setState({product});
+				this.setState({ product });
 			})
 	}
 
-	handlePurchase(event, product, quantity){
+	handlePurchase(event, product, quantity) {
 		event.preventDefault();
-		event.stopPropogation();
-		fetch('/customer', {method: 'POST', body: JSON.stringify({product, quantity})})
+		console.log(product, quantity);
+		console.log(JSON.stringify({ product, quantity }))
+		fetch('/customer', {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ product, quantity })
+		})
 			.then(res => res.json())
 			.then(data => {
-				this.setState({message: data.message})
+				console.log(data.message);
+				this.setState({ message: data.message })
 			})
 	}
-	
+
 	render() {
 		return (
-			<div className = "App" >
+			<div className="App" >
 				{this.state.message ? (<div><h1>{this.state.message}</h1></div>) : (<div></div>)}
 				<Customer product={this.state.product} fnPurchase={this.handlePurchase} />
 			</div>
