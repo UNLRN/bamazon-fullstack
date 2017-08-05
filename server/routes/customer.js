@@ -3,7 +3,7 @@ const router = require('express').Router();
 const customer = require('../models/customer.js');
 
 router.get('/', function(req, res) {
-	customer.getAll().then((results) => {
+	customer.viewProducts().then((results) => {
 		res.json(results);
 	});
 })
